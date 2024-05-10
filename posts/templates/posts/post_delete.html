@@ -7,14 +7,6 @@
     {% csrf_token %}
     <h5 class="my-3">Уверены ли вы, что хотите удалить объявление "{{ post.title }}"?</h5>
 
-    <div class="text-center my-4">
-      <h6>Продали?</h6>
-      <div>
-        <input type="radio" name="is_sells" value="True" class="form-check-input">Да
-        <input type="radio" name="is_sells" value="False" class="form-check-input" style="margin-left: 15px;">Нет<br>
-      </div>
-    </div>
-
     <button type="submit" class="btn btn-danger">Удалить</button>
   </form>
 </div>
