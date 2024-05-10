@@ -1,0 +1,14 @@
+asgiref==3.6.0
+Django==4.1.7
+django-filter==22.1
+django-jazzmin==3.0.0
+django-phonenumber-field==7.3.0
+djangorestframework==3.14.0
+djangorestframework-simplejwt==5.3.1
+Markdown==3.4.1
+phonenumbers==8.13.35
+Pillow==9.5.0
+PyJWT==2.8.0
+pytz==2022.7.1
+sqlparse==0.4.3
+tzdata==2024.1

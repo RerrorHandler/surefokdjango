@@ -1,0 +1,137 @@
+{% extends 'posts/base.html' %}
+{% load static %}
+{% block title %}Личная страница {{ user }}{% endblock %}
+{% block css %}
+<link href="{% static 'css/users/profile.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="stats shadow container mx-auto ">
+  
+    <div class="stat">
+      <div class="stat-figure text-primary">
+      </div>
+      <div class="stat-title">Топ 12 по знаку зодиака</div>
+      <div class="stat-value text-primary">по продажам</div>
+      <div class="stat-desc">по активности</div>
+    </div>
+    
+    <div class="stat">
+      <div class="stat-figure text-secondary">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+      </div>
+      <div class="stat-title">Зарегистрировался</div>
+      <div class="stat-value text-secondary">{{ user.date_joined }}</div>
+      <div class="stat-desc">Вау это же так важно?</div>
+    </div>
+    
+    <div class="stat">
+      <div class="stat-figure text-secondary">
+        <div class="avatar online">
+          <div class="w-16 rounded-full">
+            <img src="{% if user.image %} {{ user.image.url }} {% else %} {% static 'img/users/logo.png' %} {% endif %}" />
+          </div>
+        </div>
+      </div>
+      <div class="stat-value">{{ user }}</div>
+      <div class="stat-title">  {% if user.first_name %}
+        {{ user.first_name }} {{ user.last_name }}
+        {% else %}
+        -
+        {% endif %}</div>
+      <div class="stat-desc text-secondary">{{ user.email }}</div>
+      <div class="stat-desc text-secondary">{{ user.phone_number }}</div>
+      
+    </div>
+    
+  </div>
+    <div class="stat">
+      <div class="stat-figure text-primary btn">
+        <a href="{% url 'users:logout' %}" class="">Выйти</a>
+      </div>
+    </div>
+    <details class="collapse bg-gray-500">
+        <summary class="collapse-title text-xl font-medium">Открыть/Закрыть форму для изменения профиля</summary>
+        <div class="collapse-content"> 
+            <form action="{% url 'users:profile' %}" method="post" enctype="multipart/form-data" class="w-96">
+                {% csrf_token %}
+                <div class="d-flex justify-content-between gap-3">
+                    <div class="w-100">
+                        <label class="form-label" for="{{ form.first_name.id_for_label }}">Имя</label>
+                        {{ form.first_name }}
+                    </div>
+                    <div class="w-100">
+                        <label class="form-label" for="{{ form.last_name.id_for_label }}">Фамилия</label>
+                        {{ form.last_name }}
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between gap-3 my-3">
+                    <div class="w-100">
+                        <label class="form-label" for="{{ form.phone_number.id_for_label }}">Номер телефона</label>
+                        {{ form.phone_number }}
+                    </div>
+                    <div class="w-100">
+                        <label class="form-label" for="{{ form.image.id_for_label }}">
+                            Выберите изображение
+                        </label>
+                        {{ form.image }}
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between gap-3" style="margin-bottom: 20px;">
+                    <div class="w-100">
+                        <label class="form-label" for="{{ form.username.id_for_label }}">Имя пользователя</label>
+                        {{ form.username }}
+                    </div>
+                    <div class="w-100">
+                        <label class="form-label" for="{{ form.email.id_for_label }}">
+                            Адрес электронной почты
+                        </label>
+                        {{ form.email }}
+                    </div>
+                </div>
+                <div class="text-center">
+                    <input class="btn btn-success" type="submit" value="Сохранить">
+                </div>
+            </form>
+        </div>
+      </details>
+    
+
+
+{% if my_posts %}
+<h1 class="my_posts_title">Мои объявления</h1>
+{% endif %}
+<div class="grid lg:grid-cols-4 mt-10 grid-cols-1 justify-items-center grid-rows-4 gap-12">
+    {% if my_posts %}
+    {% for post in my_posts %}
+    <div class="card w-96 bg-base-100 shadow-xl">
+        <a href="{% url 'posts:post_detail' post.pk %}">
+        {% if post.image %}
+        <figure><img src="{{ post.image.url }}" alt="{{ post.title }}" /></figure>
+        {% else %}
+        <figure><img src="{% static 'img/posts/default_img.png'%}" alt="{{ post.title }}" /></figure>
+        {% endif %}
+        <div class="card-body">
+          <h2 class="card-title">
+            {{ post.title }}
+            <div class="badge badge-sm"></div>
+          </h2>
+          <p>{{ post.description }}</p>
+          <div class="card-actions justify-end">
+            <div class="badge badge-outline">{{ post.user_id.first_name }} {{ post.user_id.last_name }}</div> 
+            <div class="badge">{{ post.cost }}тг</div>
+          </div>
+        </div>
+        </a>
+      </div>
+    {% endfor %}
+    {% endif %}
+</div>
+<script>
+    const btn = document.getElementById('btn')
+    const form = document.getElementById('form')
+    btn.addEventListener('click', () => {
+        form.classList.toggle('show')
+    })
+</script>
+{% endblock %}
